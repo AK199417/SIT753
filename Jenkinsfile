@@ -19,14 +19,18 @@ pipeline {
       }
     }
     stage('Code Quality') {
-        steps {
-            echo '🔍 Running SonarCloud analysis...'
-            withSonarQubeEnv('SonarCloud') { // Replace with your configured server name if different
-      dir('jukebox-backend') {
-        bat 'sonar-scanner'
-            }
-         }
-     }
+  steps {
+    echo '🔍 Running SonarCloud analysis (manual method)...'
+    dir('jukebox-backend') {
+      withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+        bat '''
+          curl -Lo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+          powershell -Command "Expand-Archive -Path sonar-scanner.zip -DestinationPath . -Force"
+          .\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat -Dsonar.login=%SONAR_TOKEN%
+        '''
+      }
     }
+  }
+}
   }
 }
