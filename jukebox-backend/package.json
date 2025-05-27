@@ -36,8 +36,8 @@
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
-    "mocha": "^11.5.0",
     "cypress": "^14.4.0",
+    "mocha": "^11.5.0",
     "nodemon": "^3.1.10",
     "sinon": "^7.5.0",
     "sinon-mongoose": "^2.3.0"
