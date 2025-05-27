@@ -42,9 +42,9 @@ stage('Security') {
 }
 stage('Deploy') {
   steps {
-    echo '🚀 Deploying with Docker Compose...'
-    bat 'docker-compose down || echo "No containers to stop"'
-    bat 'docker-compose up -d'
+    echo '🚀 Deploying container with .env...'
+    bat 'docker rm -f jukebox-test || echo "No container to remove"'
+    bat 'docker run -d --name jukebox-test -p 3000:3000 --env-file=jukebox-backend/.env jukebox-app'
 
     echo '⏳ Waiting for backend to be ready...'
     // Retry loop until the app responds on port 3000
