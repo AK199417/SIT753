@@ -40,18 +40,21 @@ stage('Security') {
     }
   }
 }
+stage('Prepare .env') {
+  steps {
+    echo '📦 Copying .env file into Jenkins workspace...'
+    bat 'copy /Y F:\\SIT753\\Music-Recommendation\\jukebox-backend\\.env jukebox-backend\\.env'
+  }
+}
 stage('Deploy') {
   steps {
-    echo '🚀 Deploying container with full .env file...'
+    echo '🚀 Deploying container with copied .env...'
     bat '''
       docker rm -f jukebox-test || echo "No container to remove"
-      docker run -d --name jukebox-test -p 3000:3000 --env-file=.env jukebox-app
+      docker run -d --name jukebox-test -p 3000:3000 --env-file=jukebox-backend/.env jukebox-app
     '''
   }
 }
-
-
-
   }
   
 }
