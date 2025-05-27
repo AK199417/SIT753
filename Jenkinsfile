@@ -42,20 +42,16 @@ stage('Security') {
 }
 stage('Deploy') {
   steps {
-    echo '🚀 Deploying container with .env...'
-    bat 'docker rm -f jukebox-test || echo "No container to remove"'
-    bat 'docker run -d --name jukebox-test -p 3000:3000 --env-file=jukebox-backend/.env jukebox-app'
-
-    echo '⏳ Waiting for backend to be ready...'
-    // Retry loop until the app responds on port 3000
-    bat '''
-      for /L %%i in (1,1,10) do (
-        powershell -Command "try { (Invoke-WebRequest -Uri http://localhost:3000 -UseBasicParsing).StatusCode -eq 200 } catch { $false }" && exit 0 || timeout /t 5 >nul
-      )
-      echo Server is up!
-    '''
+    echo '🚀 Deploying container with injected MONGO_SECRET_KEY...'
+    withCredentials([string(credentialsId: 'MONGO_SECRET_KEY', variable: 'MONGO_SECRET_KEY')]) {
+      bat '''
+        docker rm -f jukebox-test || echo "No container to remove"
+        docker run -d --name jukebox-test -p 3000:3000 -e MONGO_SECRET_KEY=%MONGO_SECRET_KEY% jukebox-app
+      '''
+    }
   }
 }
+
 
   }
   
