@@ -1,32 +1,49 @@
-// public/js/home.js
+async function fetchTopSongs() {
+    try {
+        const res = await fetch('http://localhost:3000/api/songs/top-songs');
+        const data = await res.json();
 
-const songs = [
-    { title: 'Old Phone', artist: 'Ed Sheeran', img: '../public/images/play 6.png' },
-    { title: 'Show Me Love', artist: 'Honey Tyla', img: '../public/images/song 4.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/play 6.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Ed Sheeran', img: '../public/images/song 1.png' },
-    { title: 'Egypt - Remix', artist: 'Honey Tyla', img: '../public/images/play 6.png' }
-];
+        if (!Array.isArray(data)) {
+            console.error('Unexpected song response format:', data);
+            return [];
+        }
 
-const artists = [
-    { name: 'Ed Sheeran', label: 'Artist', img: '../public/images/song 1.png' },
-    { name: 'Beyoncé', label: 'Artist', img: '../public/images/song 1.png' },
-    { name: 'Drake', label: 'Honey Tyla', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Artist', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Honey Tyla', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Artist', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Artist', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Honey Tyla', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Artist', img: '../public/images/play 6.png' },
-    { name: 'Drake', label: 'Artist', img: '../public/images/song 4.png' },
-    { name: 'Drake', label: 'Artist', img: '../public/images/play 6.png' }
-];
+        return data.map(song => ({
+            title: song.name,
+            artist: song.artists.map(a => a.name).join(', '),
+            img: song.album?.images?.[0]?.url || '../public/images/default-song.png'
+        }));
+    } catch (error) {
+        console.error('Error fetching top songs:', error);
+        return [];
+    }
+}
+
+async function fetchTopArtists() {
+    try {
+        const res = await fetch('http://localhost:3000/api/songs/top-artists');
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+            console.error('Unexpected artist response format:', data);
+            return [];
+        }
+
+        // Filter only artists who have a valid image URL
+        const artistsWithImages = data.filter(artist => artist.image && artist.image.length > 0);
+
+        return artistsWithImages.map(artist => ({
+            name: artist.name,
+            label: 'Artist',
+            img: artist.image || '../public/images/default-artist.png',
+        }));
+
+    } catch (error) {
+        console.error('Error fetching top artists:', error);
+        return [];
+    }
+}
+
 
 function createCard(item, type) {
     const wrapper = document.createElement('div');
@@ -58,11 +75,19 @@ function createCard(item, type) {
     return wrapper;
 }
 
-function renderCarousels() {
+async function renderCarousels() {
     const trendingContainer = document.getElementById('carousel-trending');
     const artistsContainer = document.getElementById('carousel-artists');
-    songs.forEach(song => trendingContainer.appendChild(createCard(song, 'song')));
-    artists.forEach(art => artistsContainer.appendChild(createCard(art, 'artist')));
+
+    // Clear previous content if any
+    trendingContainer.innerHTML = '';
+    artistsContainer.innerHTML = '';
+
+    const topSongs = await fetchTopSongs();
+    topSongs.forEach(song => trendingContainer.appendChild(createCard(song, 'song')));
+
+    const topArtists = await fetchTopArtists();
+    topArtists.forEach(artist => artistsContainer.appendChild(createCard(artist, 'artist')));
 }
 
 document.addEventListener('DOMContentLoaded', renderCarousels);

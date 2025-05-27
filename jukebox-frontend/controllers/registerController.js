@@ -4,10 +4,14 @@ export function handleRegister(event) {
   const username = document.getElementById("regName").value.trim();
   const email = document.getElementById("regEmail").value.trim();
   const password = document.getElementById("regPassword").value;
+  const dateOfBirth = document.getElementById("regDOB").value;
+  const age = document.getElementById("regAge").value.trim();
+  const gender = document.getElementById("regGender").value;
+  const bio = document.getElementById("regBio").value.trim();
   const msgBox = document.getElementById("regMessage");
 
   // Input validations
-  if (!username || !email || !password) {
+  if (!username || !email || !password || !dateOfBirth || !age || !gender || !bio) {
     msgBox.textContent = "All fields are required.";
     msgBox.style.color = "red";
     return;
@@ -29,7 +33,7 @@ export function handleRegister(event) {
   fetch("http://localhost:3000/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, email, password })
+    body: JSON.stringify({ username, email, password, dateOfBirth, age, gender, bio })
   })
     .then(res => res.json())
     .then(data => {

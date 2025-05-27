@@ -2,7 +2,7 @@ const User = require('../model/user');
 
 // Get user
 const getUser = async (req, res, next) => {
-    const userId = req.params.id;
+    const userId = req.userId;
     
     const user = await User.findById(userId).select('-password')
       .catch(err => next(err));
@@ -16,7 +16,7 @@ const getUser = async (req, res, next) => {
 
 // Update user
 const updateUser = async (req, res, next) => {
-    const userId = req.params.id;
+    const userId = req.userId;
     const updateData = req.body;
     
     const updatedUser = await User.findByIdAndUpdate(
@@ -36,7 +36,7 @@ const updateUser = async (req, res, next) => {
 
 // Delete user
 const deleteUser = async (req, res, next) => {
-    const userId = req.params.id;
+    const userId = req.userId;
     
     const deletedUser = await User.findByIdAndDelete(userId)
       .catch(err => next(err));

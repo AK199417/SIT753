@@ -281,3 +281,30 @@ body {
   .playlist-table-wrapper::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
   }
+
+#autocomplete-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 5px;
+  padding: 0;
+}
+
+#autocomplete-results .collection-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+}
+
+#autocomplete-results .collection-item:hover {
+  background-color: #f3f3f3;
+  cursor: pointer;
+}

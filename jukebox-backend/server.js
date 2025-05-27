@@ -1,4 +1,4 @@
-require('dotenv').config(); // Load .env variables
+require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -6,57 +6,97 @@ const path = require('path');
 const cors = require('cors');
 const http = require('http');
 const socketIO = require('socket.io');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
 
-const app = express(); // ✅ define app only once
+const app = express();
 const server = http.createServer(app);
 
-// ✅ Setup Socket.IO with CORS for frontend on 127.0.0.1:5500
-const io = socketIO(server, {
-  cors: {
-    origin: "*", // Or 'http://127.0.0.1:5500'
-    methods: ["GET", "POST"]
-  }
-});
+// Use central socket manager
+const socketManager = require('./socket');
+const io = socketManager.init(server); // Automatically hooks in collabPlaylist.js
 
-const PORT = process.env.PORT || 3000;
-// Routes
-const authRoutes = require('./routes/authRoutes');
-const songRoutes = require('./routes/songRoutes');
-
-// ✅ Apply CORS BEFORE any routes
-const userListRoutes = require('./routes/userlistRoutes');
-// Apply Express CORS before routes
+// Middleware order matters! ✅
 app.use(cors());
-
-// Getting user list
-app.use('/api/users', userListRoutes);
-
-
-// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors()); // allow all origins during development
+app.use(cookieParser()); // ✅ Apply cookie-parser before session
+app.use(session({
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: true
+}));
 
-// MongoDB Connection
+
+// MongoDB
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 mongoose.connection.on('connected', () => {
-  console.log('✅ Connected to MongoDB Atlas!');
+  console.log('Connected to MongoDB Atlas!');
 });
 mongoose.connection.on('error', (err) => {
-  console.error('❌ MongoDB connection error:', err);
+  console.error('MongoDB connection error:', err);
 });
 
-// REST Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/songs', songRoutes); 
+// API Routes (After session & cookieParser!)
+const authRoutes = require('./routes/authRoutes');
+const songRoutes = require('./routes/songRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const userListRoutes = require('./routes/userlistRoutes');
+const viewRoutes = require('./routes/viewRoutes');
+const playlistRoutes = require('./routes/playlistRoutes');
+const collabPlaylistRoutes = require('./routes/collabPlaylistRoutes');
 
-// WebSocket logic (keep chat logic in a separate file)
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/songs', songRoutes);
+app.use('/api/users', userListRoutes);
+app.use('/api/users', adminRoutes);
+app.use('/api/playlists', playlistRoutes);
+app.use('/', viewRoutes);
+app.use('/api/playlist', collabPlaylistRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// WebSocket Chat
 require('./socket/chat')(io);
 
-// Start HTTP server
+// Serve frontend assets
+app.use(express.static(path.join(__dirname, 'jukebox-frontend')));
+console.log('Landing path:', path.join(__dirname, 'jukebox-frontend', 'views', 'landing.html'));
+
+// Start server
+const PORT = process.env.PORT || 3000;
+
+
+app.get('/api/student', (req, res) => {
+  res.json({
+    name: 'Arulrajah Kumaraguruparar',
+    studentId: 's224961108'
+  });
+});
+// if (cluster.isMaster) {
+//   console.log(`Master ${process.pid} is running`);
+
+//   // Fork workers for each CPU
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`Worker ${worker.process.pid} died`);
+//     cluster.fork();
+//   });
+// } else {
+//   server.listen(PORT, () => {
+//     console.log(`Server running at http://localhost:${PORT}`);
+//   });
+// }
+
 server.listen(PORT, () => {
-  console.log(` Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });

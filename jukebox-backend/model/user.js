@@ -4,10 +4,18 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
+  dateOfBirth: Date,
+  age: String,
+  gender: String,
+  bio: String,
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
+  },
+  blocked: {
+    type: Boolean,
+    default: false  
   },
   spotify: {
     id: String,

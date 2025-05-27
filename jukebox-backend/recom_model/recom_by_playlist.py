@@ -5,7 +5,6 @@ from sklearn.preprocessing import StandardScaler
 class PlaylistRecommender:
     def __init__(self, data_path):
         self.df = pd.read_csv(data_path)
-        
         # Define feature columns (audio features + genre encoding)
         self.feature_cols = ['danceability', 'energy', 'loudness', 'speechiness',
                              'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']

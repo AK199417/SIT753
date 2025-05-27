@@ -16,4 +16,24 @@ const getSongById = async (trackId) => {
   return result.body;
 };
 
-module.exports = { getSongById };
+const getSongByName = async (query) => {
+  if (!query || query.trim() === "") {
+    console.error("Search query is empty.");
+    return;
+  }
+  await getAccessToken();
+  const data = await spotifyApi.searchTracks(query, { limit: 5 });
+  return data.body.tracks.items;
+};
+const getArtistById = async (artistId) => {
+  await getAccessToken();
+  const result = await spotifyApi.getArtist(artistId);
+  return {
+    id: result.body.id,
+    name: result.body.name,
+    image: result.body.images?.[0]?.url || null,
+    genres: result.body.genres,
+  };
+};
+
+module.exports = { getSongById, getSongByName, getArtistById };

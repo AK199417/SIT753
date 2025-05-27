@@ -290,6 +290,8 @@ footer .icons a {
   padding: 10px;
   vertical-align: middle;
 }
+
+.add-btn,
 .export-btn,
 .delete-btn {
   flex: 1;
@@ -319,6 +321,24 @@ footer .icons a {
 .delete-btn:hover {
   background-color: #c0392b;
 }
+
+.add-btn {
+  background-color: #bf50b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.add-btn:hover {
+  background-color: #ad4aa0;
+}
+
+.add-btn i.material-icons {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
 .modal-close-btn {
   position: absolute;
   top: 12px;

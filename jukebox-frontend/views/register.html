@@ -4,46 +4,62 @@
   <meta charset="UTF-8">
   <title>Register</title>
 
-  <!-- Link to custom CSS with background, layout, and glassmorphism styles -->
   <link rel="stylesheet" href="../public/css/style.css">
 </head>
 <body>
 
-  <!-- Logo shown at the top-left corner -->
-  <img src="../public/images/logo.png" alt="Logo" class="logo-top">
 
-  <!-- Wrapper to center the registration form on the page -->
+  <img src="../public/images/logofinal.png" alt="Logo" class="logo-top">
+
   <div class="center-wrapper">
 
-    <!-- Glass-effect styled container for the form -->
+   
     <div class="login-container">
       <h2>Register</h2>
 
       <!-- Registration form -->
       <form id="registerForm">
-        <!-- Name input -->
+        
         <label for="regName">Name:</label><br>
         <input type="text" id="regName" required><br><br>
 
-        <!-- Email input -->
+       
         <label for="regEmail">Email:</label><br>
         <input type="email" id="regEmail" required><br><br>
 
-        <!-- Password input -->
+       
         <label for="regPassword">Password:</label><br>
         <input type="password" id="regPassword" required><br><br>
 
-        <!-- Submit button -->
+        <label for="regDOB">Date of Birth:</label><br>
+        <input type="date" id="regDOB" required><br><br>
+
+        <label for="regAge">Age:</label><br>
+        <input type="text" id="regAge" required><br><br>
+
+        <label for="regGender">Gender:</label><br>
+        <select id="regGender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Non-binary">Non-binary</option>
+          <option value="Other">Other</option>
+        </select><br><br>
+
+        <label for="regBio">Create your Bio:</label><br>
+        <textarea id="regBio" rows="3" placeholder="Tell us about yourself..."></textarea><br><br>
+
+        
         <button type="submit">Register</button>
       </form>
 
       <!-- Message box for feedback (e.g. success or validation errors) -->
       <p id="regMessage"></p>
 
-      <!-- Redirect link for existing users -->
+      
       <p class="register-link">
         Already have an account?
-        <a href="login.html">Login here</a>
+        <a href="login">Login here</a>
       </p>
     </div>
   </div>
@@ -53,7 +69,6 @@
     <p>© 2025 Juke Box Music Studio. All rights reserved.</p>
   </footer>
 
-  <!-- Link to the JS controller that handles form submission logic -->
   <script type="module">
     import { handleRegister } from '../controllers/registerController.js';
     document.getElementById('registerForm').addEventListener('submit', handleRegister);

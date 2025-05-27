@@ -4,39 +4,29 @@
   <meta charset="UTF-8">
   <title>Login</title>
 
-  <!-- Link to external custom CSS file -->
   <link rel="stylesheet" href="../public/css/style.css">
 </head>
 <body>
-
-  <!-- Top-left logo -->
-  <img src="../public/images/logo.png" alt="Logo" class="logo-top">
-
-  <!-- Centering wrapper to align the form box in the middle of the screen -->
+  <img src="../public/images/logofinal.png" alt="Logo" class="logo-top">
   <div class="center-wrapper">
 
-    <!-- Glass-effect login form container -->
     <div class="login-container">
       <h2>Login</h2>
 
       <!-- Login form -->
       <form id="loginForm">
-        <!-- Email field -->
         <label>Email:</label><br>
         <input type="email" id="email" required><br><br>
 
-        <!-- Password field -->
         <label>Password:</label><br>
         <input type="password" id="password" required><br><br>
 
-        <!-- Submit button -->
         <button type="submit">Login</button>
       </form>
 
-      <!-- Link to register page for new users -->
       <p class="register-link">
         Don't have an account?
-        <a href="register.html">Register here</a>
+        <a href="register">Register here</a>
       </p>
 
       <!-- Message area for login feedback (success or error) -->
@@ -44,7 +34,6 @@
     </div>
   </div>
 
-  <!-- Login logic (JS module handles form submission) -->
   <script type="module">
     import { handleLogin } from '../controllers/loginController.js';
     document.getElementById('loginForm').addEventListener('submit', handleLogin);

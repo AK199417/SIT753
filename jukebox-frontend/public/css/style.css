@@ -1,30 +1,24 @@
-/* === Global Background Layer === */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('../images/bg.jpg') no-repeat center center fixed;
-  background-size: cover;
-  z-index: -1;
-}
-
-html, body {
+/* === Background === */
+body {
+  background: linear-gradient(165deg, #1A0648 29.89%, #831B58 103.18%, #ED2F67 110.49%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  height: 100%;
   overflow-x: hidden;
 }
 
-body {
-  position: relative;
-  font-family: Arial, sans-serif;
-  background: transparent;
+/* === Sticky Navbar === */
+nav {
+  background-color: black !important;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-/* === Navigation Bar === */
+/* === Navbar Layout === */
 .nav-flex {
   display: flex;
   align-items: center;
@@ -51,10 +45,21 @@ body {
   font-size: 1.5rem;
 }
 
+/* === Navbar Links === */
 .nav-links {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+.nav-links a {
+  color: white;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ff4081;
 }
 
 /* === Center Wrapper for Login/Register === */
@@ -107,6 +112,20 @@ input::placeholder {
   color: #aaa;
 }
 
+textarea#regBio {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  resize: vertical;
+  font-family: inherit;
+  color: #333;
+  background-color: white;
+}
+
 button {
   width: 90%;
   padding: 10px;
@@ -148,12 +167,6 @@ h2, label {
 }
 
 /* === Profile Page === */
-body.profile-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 body.profile-page main {
   flex: 1 0 auto;
 }
@@ -238,6 +251,4 @@ body.profile-page main {
   color: #ccc;
   font-size: 12px;
   padding: 10px;
-  background-color: #004d40;
 }
-
