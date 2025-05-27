@@ -5,9 +5,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building Docker image...'
-        script {
-          sh 'docker build -t jukebox-app .'
-        }
+        bat 'docker build -t jukebox-app .'
       }
     }
   }
