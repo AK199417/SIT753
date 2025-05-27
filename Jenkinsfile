@@ -45,7 +45,7 @@ stage('Deploy') {
     echo '🚀 Deploying container with full .env file...'
     bat '''
       docker rm -f jukebox-test || echo "No container to remove"
-      docker run -d --name jukebox-test -p 3000:3000 --env-file=jukebox-backend/.env jukebox-app
+      docker run -d --name jukebox-test -p 3000:3000 --env-file=.env jukebox-app
     '''
   }
 }
