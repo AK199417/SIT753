@@ -40,8 +40,7 @@ stage('Security') {
     }
   }
 }
-  }
-  stage('Deploy') {
+stage('Deploy') {
   steps {
     echo '🚀 Deploying Docker container as test environment...'
     // Remove any existing container
@@ -50,4 +49,6 @@ stage('Security') {
     bat 'docker run -d --name jukebox-test -p 3000:3000 jukebox-app'
   }
 }
+  }
+  
 }
