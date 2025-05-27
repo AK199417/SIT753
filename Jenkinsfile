@@ -42,13 +42,21 @@ stage('Security') {
 }
 stage('Deploy') {
   steps {
-    echo '🚀 Deploying Docker container as test environment...'
-    // Remove any existing container
-    bat 'docker rm -f jukebox-test || echo "No container to remove"'
-    // Run the new container from the built image
-    bat 'docker run -d --name jukebox-test -p 3000:3000 jukebox-app'
+    echo '🚀 Deploying with Docker Compose...'
+    bat 'docker-compose down || echo "No containers to stop"'
+    bat 'docker-compose up -d'
+
+    echo '⏳ Waiting for backend to be ready...'
+    // Retry loop until the app responds on port 3000
+    bat '''
+      for /L %%i in (1,1,10) do (
+        powershell -Command "try { (Invoke-WebRequest -Uri http://localhost:3000 -UseBasicParsing).StatusCode -eq 200 } catch { $false }" && exit 0 || timeout /t 5 >nul
+      )
+      echo Server is up!
+    '''
   }
 }
+
   }
   
 }
