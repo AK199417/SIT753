@@ -41,4 +41,13 @@ stage('Security') {
   }
 }
   }
+  stage('Deploy') {
+  steps {
+    echo '🚀 Deploying Docker container as test environment...'
+    // Remove any existing container
+    bat 'docker rm -f jukebox-test || echo "No container to remove"'
+    // Run the new container from the built image
+    bat 'docker run -d --name jukebox-test -p 3000:3000 jukebox-app'
+  }
+}
 }
