@@ -32,5 +32,13 @@ pipeline {
     }
   }
 }
+stage('Security') {
+  steps {
+    echo '🔐 Running security scan using npm audit...'
+    dir('jukebox-backend') {
+      bat 'npm audit --audit-level=low'
+    }
+  }
+}
   }
 }
