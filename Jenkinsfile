@@ -18,5 +18,15 @@ pipeline {
         }
       }
     }
+    stage('Code Quality') {
+        steps {
+            echo '🔍 Running SonarCloud analysis...'
+            withSonarQubeEnv('SonarCloud') { // Replace with your configured server name if different
+      dir('jukebox-backend') {
+        bat 'sonar-scanner'
+            }
+         }
+     }
+    }
   }
 }
