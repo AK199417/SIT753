@@ -42,15 +42,14 @@ stage('Security') {
 }
 stage('Deploy') {
   steps {
-    echo '🚀 Deploying container with injected MONGO_SECRET_KEY...'
-    withCredentials([string(credentialsId: 'MONGO_SECRET_KEY', variable: 'MONGO_SECRET_KEY')]) {
-      bat '''
-        docker rm -f jukebox-test || echo "No container to remove"
-        docker run -d --name jukebox-test -p 3000:3000 -e MONGO_SECRET_KEY=%MONGO_SECRET_KEY% jukebox-app
-      '''
-    }
+    echo '🚀 Deploying container with full .env file...'
+    bat '''
+      docker rm -f jukebox-test || echo "No container to remove"
+      docker run -d --name jukebox-test -p 3000:3000 --env-file=jukebox-backend/.env jukebox-app
+    '''
   }
 }
+
 
 
   }
