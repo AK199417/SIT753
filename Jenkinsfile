@@ -59,7 +59,7 @@ stage('Deploy to Production') {
   steps {
     withCredentials([[
       $class: 'AmazonWebServicesCredentialsBinding',
-      credentialsId: 'your-aws-credentials-id'
+      credentialsId: '55a3e9eb-541a-49f4-b328-bc6d69605fd3'
     ]]) {
       bat '''
         powershell Compress-Archive -Path jukebox-backend\\* -DestinationPath deploy.zip
