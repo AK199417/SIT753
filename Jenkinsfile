@@ -55,6 +55,27 @@ stage('Deploy') {
     '''
   }
 }
+stage('Deploy to Production') {
+  steps {
+    withCredentials([[
+      $class: 'AmazonWebServicesCredentialsBinding',
+      credentialsId: 'your-aws-credentials-id'
+    ]]) {
+      bat '''
+        powershell Compress-Archive -Path jukebox-backend\\* -DestinationPath deploy.zip
+        aws s3 cp deploy.zip s3://deakinsarul/release/latest.zip --region us-east-1
+
+        aws deploy create-deployment ^
+          --application-name jukebox-app ^
+          --deployment-group-name jukebox-deployment-group ^
+          --s3-location bucket=deakinsarul,key=release/latest.zip,bundleType=zip ^
+          --region us-east-1 ^
+          --description "Automated deployment from Jenkins"
+      '''
+    }
+  }
+}
+
   }
   
 }
