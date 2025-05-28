@@ -62,7 +62,7 @@ stage('Deploy to Production') {
       credentialsId: '55a3e9eb-541a-49f4-b328-bc6d69605fd3'
     ]]) {
       bat '''
-        powershell Compress-Archive -Path jukebox-backend\\* -DestinationPath deploy.zip
+        powershell Compress-Archive -Path * -DestinationPath deploy.zip
         aws s3 cp deploy.zip s3://deakinsarul/release/latest.zip --region us-east-1
 
         aws deploy create-deployment ^
